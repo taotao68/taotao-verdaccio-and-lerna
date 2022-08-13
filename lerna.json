@@ -2,15 +2,20 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useNx": true,
   "useWorkspaces": true,
-  "version": "0.0.0",
-  "npmClient":"pnpm",
-  "publishConfig":{
-    "registry":"http://localhost:4873/"  
+  "version": "0.0.1",
+  "npmClient": "pnpm",
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
   },
-  "packages":["packages/*"],
+  "packages": [
+    "packages/*"
+  ],
   "command": {
     "publish": {
-      "ignoreChanges":["*.md","tests"]
+      "ignoreChanges": [
+        "*.md",
+        "tests"
+      ]
     }
   }
 }
