@@ -66,3 +66,4 @@ webapck 中插件plugin 使用可以忽略那些的 webpack.IgnorePlugin({
 })
 
 接下来我们新建一个仓库，我们是git之后才可以push上去的
+lerna publish 发包
