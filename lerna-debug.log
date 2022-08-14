@@ -1,8 +1,0 @@
-15 error Error: Command failed with exit code 1: git remote update
-15 error fatal: 无法访问 'https://github.com/taotao68/taotao-verdaccio-and-lerna.git/'：Failed to connect to github.com port 443 after 75018 ms: Operation timed out
-15 error     at makeError (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/execa@5.1.1/node_modules/execa/lib/error.js:60:11)
-15 error     at Function.module.exports.sync (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/execa@5.1.1/node_modules/execa/index.js:194:17)
-15 error     at Object.execSync (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/@lerna+child-process@5.4.0/node_modules/@lerna/child-process/index.js:39:16)
-15 error     at updateRemote (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/@lerna+version@5.4.0/node_modules/@lerna/version/lib/is-behind-upstream.js:34:16)
-15 error     at isBehindUpstream (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/@lerna+version@5.4.0/node_modules/@lerna/version/lib/is-behind-upstream.js:16:3)
-15 error     at VersionCommand.initialize (/Users/liukeke/Desktop/yideng-libs/node_modules/.pnpm/@lerna+version@5.4.0/node_modules/@lerna/version/index.js:153:9)
