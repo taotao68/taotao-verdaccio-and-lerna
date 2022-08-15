@@ -27,6 +27,7 @@ module.exports = {
         lazyCompilation:true
       }
     },
+    disableTelemetry: true, // 👈 Disables telemetry
   },
   webpackFinal:(config)=>{
     const fileLoaderRule=config.module.rules.find((rule)=>

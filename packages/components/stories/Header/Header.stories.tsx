@@ -20,6 +20,15 @@ LoggedIn.args = {
     name: 'Jane Doe',
   },
 };
+LoggedIn.parameters={
+  docs:{
+    source:{
+      type:'auto',  //默认自动生成的
+      code:`<Header/>`,
+      language:'tsx'
+    }
+  }
+}
 
 export const LoggedOut = Template.bind({});
 LoggedOut.args = {};
