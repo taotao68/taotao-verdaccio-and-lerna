@@ -5,7 +5,7 @@ import Select,{DataType} from "./index";
 
 // 定义组件，在左侧展示组件的目录标题
 export default {
-  title: "Componenst/Select", //基础的组件放在components
+  title: "Components/Select", //基础的组件放在components
   component: Select,
 } as ComponentMeta<typeof Select>;
 

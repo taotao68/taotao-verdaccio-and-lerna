@@ -362,5 +362,162 @@ Basic.args = {};
 和lazy的区别  lazy是路由命中的时候才会去加载  preload我们可以手动的去触发  ，例如 鼠标划入时去preload，点击进去是没有loading状态的 无感知加载 提升用户体验  
 尤其是大型项目 就是提前记载  让用户没有loading的感知
 
+8-17号代码学习：
+业务组件中用到的数据一般都是从接口后台请求获取的数据，来真实展示的
+我们会用到react-query 来获取数据并展示  使用mock service worker来模拟后台的数据请求
+在storybook使用MSW  MOCK  service worker ,需要安装一个插件   pnpm  add msw-storybook-addon -w -D
+我们需要在storybook配置一下，才可以使用  
+还需要安装msw  pnpm add -w -D
+安装好之后，安装官网的步骤在preview.js中加入如下配置：
+// 配置使用msw插件的代码
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+
+// Initialize MSW  初始化MSW
+initialize();
+
+// Provide the MSW addon decorator globally，提供全局使用MSW的工具插件装饰器
+export const decorators = [mswDecorator];
+
+然后再初始化  npx msw  init  public/
+会在public目录下生成一个mockServiceWorker.js文件  如果public目录不存在，就会创建，如果存在就不会创建
+
+package.json 文件中也会生成一个配置   "msw": {
+    "workerDirectory": "public"
+  } 意思就是msw  的指向目录
+
+还需要在package.json中的scripts中 
+"scripts": {
+    "storybook": "start-storybook -p 6006 -s public",
+  启动项目时，需要在后面加入  -s public 来找到对应的文件夹，启动项目
+
+开始模拟发送请求：业务组件中用到的数据一般都是从接口后台请求获取的数据
+安装axios   pnpm add axios -w
+index.tsx文件中
+// 发送请求之前我们要先定义这个mock  以及这个mock的请求路径
+    useEffect(()=>{
+      axios.get('/people').then(({data})=>{
+        console.log(data)
+      })
+    },[])
+    // 然后就需要定义一下我们的mock，只在这一个组件中生效
+    // 在storybook中不建议在全局中的定义mock数据 ,可以在单独的组件中定义mock
+PeopleSelect.stories.tsx文件中
+// msw-storybook-addon'  这个插件是可以取到我们在这里的mock配置的
+Default.parameters = {
+  msw: {
+    // 在这个里面定义我们的mock,
+    // 就是和nodejs差不多  了用路由的匹配 吧想要的数据返回回去
+    handlers: [
+      rest.get("/people", (req, res, ctx) => {
+        return res(
+          ctx.json({
+            people: [
+              { name: "Wade Cooper", value: 1 },
+              { name: "Arlene Mccoy", value: 2 },
+              { name: "Devon Webb", value: 3 },
+              { name: "Tom Cook", value: 4 },
+              { name: "Tanya Fox", value: 5 },
+              { name: "Hellen Schmidt", value: 6 },
+            ],
+          })
+        );
+      }),
+    ],
+  },
+};
+
+
+一般的项目中，我们最好写一个mock文件，把路由匹配，数据都放在一个mock文件中
+
+garphQL 使用graphQL时最好使用applo吧
+
+react-query  主要是把异步的状态交给react-query来管理  存储缓存和key的取值  可以配置缓存时间  更适用于移动端和展示型的网站  缓存时间到了，就会清空
+有两个配置  全局配置和各个请求的配置   设置全局缓存后，我们可以在项目中的整个地方可以获取到需要的值  使用简单  高级配置比较多
+
+react-query  并不是代替mobx redux jotai等状态管理工具的
+假如遇到并行的请求的，用react-query  就比较鸡肋了   react-query  做数据的预先取  实现SSR的时候
+
+使用react-query来
+安装pnpm   add @tanstack/react-query -w
+然后配置：preview。js文件中配置依赖的更新改变
+import {QueryClient,QueryClientProvider} from '@tanstack/react-query'
+import {addDecorator} from '@storybook/react'
+
+// 需要将queryclient  初始化实例,并且配置，主要是配置缓存的时间，
+const queryClient=new QueryClient({
+  defaultOptions:{
+    queries:{
+      staleTime:Infinity,
+      cacheTime:Infinity,
+      refetchOnWindowFocus:false,
+    }
+  }
+})
+// 作用是在全局给每一个stories生效
+addDecorator(stories=>(
+  // 我们的provider会应用到我们的每一个stories上
+  <QueryClientProvider client={queryClient}>{stories()}</QueryClientProvider>
+))
+
+然后再index.tsx中使用
+import { useQuery } from "@tanstack/react-query";
+// people-key就是一个key,第二个参数是请求的方法，第三个方法是配置  例如select过滤数据，直接返回到需要的数据的地方
+  const query = useQuery(["people-key"], () => axios.get("/people"),{select:(data)=>data.data.people});
+  
+// 还可以配置轮询  在第三个参数里面配置efetchInterval:2000  每2秒轮询请求一次
+  const query = useQuery(["people-key"], () => axios.get("/people"),{select:(data)=>data.data.people,refetchInterval:2000});
+  
+  // 接下来我们先判断下
+  if (query.status === "loading") return "loading";
+  if (query.status === "success"){
+    console.log(query.data);
+    return (
+      <Select
+        data={query.data}
+        selected={selected}
+        onChange={(e) => setSelected(e)}
+      />
+    );
+  }
+
+
+
+<!-- 安装插件 -->
+pnpm add @tanstack/react-query-devtools -w -D  这是开发环境中的调试工具  可以根据环境来判断是否展示即可
+在preview.js中使用
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// 作用是在全局给每一个stories生效
+addDecorator((stories) => (
+  // 我们的provider会应用到我们的每一个stories上
+  <QueryClientProvider client={queryClient}>
+    {stories()}
+    <ReactQueryDevtools />
+  </QueryClientProvider>
+));
+按照上面的配置  开发中的调试工具会再每个组件中都会显示 ，一些不是业务组件的我们不需要这个插件展示，我们可以在各自的stories中配置调试工具的展示
+例如：在peopleselect.stories.tsx
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+加入decoractors的配置
+export default {
+  title: "Business/PeopleSelect",
+  component: PeopleSelect,
+  decorators:[
+     (Story)=>(
+       <>
+       <Story/>
+       <ReactQueryDevtools/>
+       </>
+     )
+  ]
+} as ComponentMeta<typeof PeopleSelect>;
+
+
+useQueryClient 的使用   const queryClient=useQueryClient()
+可以使用它获取数据的缓存，以及清除等  还有数据的订阅与发布
+官网的hooks 文档多看看
+
+localforage
+
+错误处理的通用组件的学习
 
 

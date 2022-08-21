@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook"
   },
   "keywords": [],
@@ -26,11 +26,14 @@
     "@storybook/testing-library": "0.0.13",
     "@svgr/webpack": "^6.3.1",
     "@swc/core": "^1.2.229",
+    "@tanstack/react-query-devtools": "^4.2.1",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "autoprefixer": "^10.4.8",
     "babel-loader": "^8.2.5",
     "lerna": "^5.4.0",
+    "msw": "^0.44.2",
+    "msw-storybook-addon": "^1.6.3",
     "postcss": "^8",
     "storybook-addon-swc": "^1.1.8",
     "storybook-dark-mode": "^1.1.0",
@@ -38,8 +41,13 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.2.1",
+    "axios": "^0.27.2",
     "classnames": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
