@@ -521,3 +521,10 @@ localforage
 错误处理的通用组件的学习
 
 
+使用vite重新创建一个demo
+npm create vite  即可
+
+将组件暴露出去，并在项目中使用
+在components文件夹下的index.ts中暴露出去
+export {default as Select} from './stories/Select'
+
