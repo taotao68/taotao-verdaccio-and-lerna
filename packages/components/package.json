@@ -1,7 +1,7 @@
 {
   "name": "@ttao/components",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.ts",
   "scripts": {},
@@ -11,7 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
-    "@ttao/hooks": "^1.0.0",
+    "@ttao/hooks": "^1.0.1",
     "solid": "link:@heroicons/react/solid"
   },
   "gitHead": "7ae74c18a44c137ce83cd422c16f45879de68214"
